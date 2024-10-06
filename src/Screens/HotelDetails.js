@@ -21,14 +21,14 @@ function HotelDetails( {image, name, rating, price, about, facilities} ) {
                 price={price}
                 />
 
-                <View style={styles.aboutContainer}>
-                    <AppText style={styles.aboutHeader}> About </AppText>
-                    <AppText style={styles.aboutBody}> {about} </AppText>
+                <View styles={styles.aboutContainer}>
+                    <AppText styles={styles.aboutHeader}> About </AppText>
+                    <AppText styles={styles.aboutBody}> {about} </AppText>
                 </View>
 
-                <View style={styles.facilitiesContainer}>
-                    <AppText style={styles.facilitiesHeader}> Facilites </AppText>
-                    <AppText style={styles.facilities}> {facilities} </AppText>
+                <View styles={styles.facilitiesContainer}>
+                    <AppText styles={styles.facilitiesHeader}> Facilites </AppText>
+                    <AppText styles={styles.facilities}> {facilities} </AppText>
                 </View>
             </View>
         </Screen>

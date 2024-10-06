@@ -6,6 +6,7 @@
     "configurations": [
         
         
+        
         {
             "name": "Attach to packager",
             "cwd": "${workspaceFolder}",

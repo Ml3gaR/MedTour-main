@@ -11,7 +11,7 @@ function MyAccountScreen(props) {
         <Screen>
             <View style={styles.container}>
                 <View style={styles.MyInfo}>
-                    <Image style={styles.image}source={require('../../assets/Raied.png')}/>
+
                     <View style={styles.MyInfoDetails}>
                         <AppText style={styles.username}>Osama</AppText>
                         <AppText style={styles.email}>Osama18111@gmail.com</AppText>
