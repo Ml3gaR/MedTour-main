@@ -1,72 +1,127 @@
-import React from 'react';
-import * as Yup from 'yup';
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from "react-native";
+import { auth, db } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
-import Screen from '../components/Screen';
-import {AppForm, AppFormField, SubmitButton} from '../components/forms';
+export default function RegisterScreen({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match!");
+      return;
+    }
 
-const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label("Email"),
-    username: Yup.string().required().min(4).label("Username"),
-    mobileNumber:Yup.string().required()
-    .matches(/^[0-9]{10,15}$/, "Mobile number is not valid").label("Mobile Number"),
-    password: Yup.string().required().min(6).label("Password")
-});
+    try {
+      // Create a new user with email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-function RegisterScreen() {
-    return (
-        <Screen>
-            <AppForm
-            initialValues={{
-                email: "",
-                username: "",
-                mobileNumber: "",
-                passwrod: "",
-            }}
-            onSubmit={values => console.log(values)}
-            validationSchema={validationSchema}
-            >
-                <AppFormField
-                autoCapitalize="none"
-                autoCorrect={false}
-                icon="email"
-                keyboardType="email-address"
-                name="email"
-                placeholder="Email"
-                textContetType="emailAdress"
-                />
+      // Save user details in Firestore with hardcoded userType
+      await setDoc(doc(db, "users", user.uid), {
+        email,
+        userType: "user", // Hardcoded to "user"
+        createdAt: new Date().toISOString(),
+      });
 
-                <AppFormField
-                autoCapatiliz="none"
-                autoCorrect={false}
-                icon="account"
-                name="username"
-                placeholder="Name"
-                textContetType="username"
-                />
+      Alert.alert("Success", "User registered successfully!");
+      navigation.navigate("LoginScreen"); // Redirect to Login screen after successful registration
+    } catch (error) {
+      console.error("Error during registration:", error.message);
+      Alert.alert("Registration Error", error.message);
+    }
+  };
 
-                <AppFormField
-                autoCorrect={false}
-                icon="phone"
-                keyboardType="phone-pad"
-                name="mobileNumber"
-                placeholder="Mobile Number"
-                />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Create Your Account</Text>
 
-                <AppFormField
-                autoCapitalize="none"
-                autoCorrect={false}
-                icon="lock"
-                name="password"
-                placeholder="Password"
-                secureTextEntry
-                textContetType="password"
-                />
+      {/* Email Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        textContentType="emailAddress"
+      />
 
-                <SubmitButton title="Register"/>
-            </AppForm>
-        </Screen>
-    );
+      {/* Password Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        textContentType="password"
+      />
+
+      {/* Confirm Password Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+        textContentType="password"
+      />
+
+      {/* Register Button */}
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      {/* Redirect to Login */}
+      <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+        <Text style={styles.loginText}>Already have an account? Log in</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
-export default RegisterScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#fff",
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#007BFF",
+    textAlign: "center",
+    marginBottom: 30,
+  },
+  input: {
+    height: 50,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    backgroundColor: "#f9f9f9",
+  },
+  button: {
+    backgroundColor: "#007BFF",
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  loginText: {
+    color: "#007BFF",
+    textAlign: "center",
+    fontSize: 14,
+  },
+});
+

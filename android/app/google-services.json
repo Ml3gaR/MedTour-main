@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "111155888938",
+    "project_id": "medtour-70ff8",
+    "storage_bucket": "medtour-70ff8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111155888938:android:5b8cf31fabf369c68ad453",
+        "android_client_info": {
+          "package_name": "com.anonymous.MedTour"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArTQBOP9wX3wfXaHDwVDYKaV26VwpIXvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,78 +1,87 @@
-import React, { useState } from 'react';
-import { View, FlatList, TextInput, StyleSheet } from 'react-native';
-import HospitalCard1 from '../components/cards/HospitalCard1';  // Import the HospitalCard1 component
+import React, { useEffect, useState } from "react";
+import { View, FlatList, StyleSheet, ActivityIndicator, Text } from "react-native";
+import { db } from "../firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import HospitalCard from "../components/cards/HospitalCard"; // Updated to use the new card component
 
-const HospitalListScreen = () => {
-  // Mock hospital data (replace this with actual data later)
-  const mockHospitals = [
-    {
-      id: 1,
-      name: "Nordwest Clinic",
-      specialty: "Cardiology",
-      rating: 4.7,
-      distance: "2000m",
-      price: 1575,
-      image: "https://example.com/hospital1.jpg"
-    },
-    {
-      id: 2,
-      name: "St. Katharinen Hospital",
-      specialty: "Cardiology",
-      rating: 5.0,
-      distance: "1000m",
-      price: 1400,
-      image: "https://example.com/hospital2.jpg"
-    },
-    {
-        id: 3,
-        name: "KSU ",
-        specialty: "Cardiology",
-        rating: 5.0,
-        distance: "1000m",
-        price: 1400,
-        image: "https://example.com/hospital2.jpg"
-      },
-  ];
+export default function HospitalListScreen({ route, navigation }) {
+  const { country, city, category } = route.params; // Get filters from navigation params
+  const [hospitals, setHospitals] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        const q = query(
+          collection(db, "facilities"),
+          where("country", "==", country),
+          where("city", "==", city),
+          where("clinicType", "==", category)
+        );
+        const querySnapshot = await getDocs(q);
+        const hospitalList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setHospitals(hospitalList);
+      } catch (error) {
+        console.error("Error fetching hospitals:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHospitals();
+  }, [country, city, category]);
+
+  const handleHospitalPress = (hospital) => {
+    navigation.navigate("HospitalDetailsScreen", { hospitalId: hospital.id });
+  };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#007BFF" style={{ flex: 1 }} />;
+  }
+
+  if (hospitals.length === 0) {
+    return (
+      <View style={styles.noDataContainer}>
+        <Text style={styles.noDataText}>No hospitals found for the selected filters.</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      {/* Search bar to filter hospitals */}
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search doctor, clinics..."
-        value={searchQuery}
-        onChangeText={text => setSearchQuery(text)}
-      />
-
-      {/* FlatList to render the hospital cards */}
-      <FlatList
-        data={mockHospitals.filter(hospital =>
-          hospital.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          hospital.specialty.toLowerCase().includes(searchQuery.toLowerCase())
-        )}  // Filter hospitals based on search query
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <HospitalCard1 hospital={item} />}  // Use the HospitalCard1 component
-      />
-    </View>
+    <FlatList
+      data={hospitals}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <HospitalCard
+          image={{ uri: item.image || "https://via.placeholder.com/150" }} // Placeholder if no image
+          name={item.hospitalName}
+          specialist={item.clinicType}
+          distance={item.distance || "N/A"} // Optional: Add distance field to Firestore if needed
+          price={item.price || "N/A"} // Optional: Add price field to Firestore if needed
+          rating={item.rating || "N/A"} // Optional: Add rating field to Firestore if needed
+          onPress={() => handleHospitalPress(item)}
+        />
+      )}
+      contentContainerStyle={styles.listContainer}
+    />
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 10,
-  },
-  searchBar: {
-    marginVertical: 10,
+  listContainer: {
     padding: 10,
-    borderRadius: 8,
-    backgroundColor: '#f5f5f5',
-    borderColor: '#e0e0e0',
-    borderWidth: 1,
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noDataText: {
+    fontSize: 18,
+    color: "#777",
+    textAlign: "center",
   },
 });
-
-export default HospitalListScreen;

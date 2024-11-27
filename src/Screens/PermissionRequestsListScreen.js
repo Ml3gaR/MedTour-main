@@ -11,13 +11,13 @@ const initialRequests = [
     id: 1,
     title: 'T1',
     description: 'D1',
-    image: require('../../assets/doctor1.png'), 
+    image: require('../assets/MedTourLogo.png'), 
     },
     {
         id: 2,
         title: 'T2',
         description: 'D2',
-        image: require('../../assets/doctor2.png'),
+        image: require('../assets/MedTourLogo.png'),
     },
 ]
 function PermissionRequestsListScreen(props) {
@@ -49,7 +49,7 @@ function PermissionRequestsListScreen(props) {
                         id: 2,
                         title: 'T2',
                         description: 'D2',
-                        image: require('../../assets/Raied.png'),
+                        image: require('../assets/MedTourLogo.png'),
                     },
                 ]);
             }}
