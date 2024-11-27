@@ -3,13 +3,23 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from "reac
 import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleRegister = async () => {
+    if (!name || !phoneNumber || !dateOfBirth) {
+      Alert.alert("Error", "Please fill in all the required fields!");
+      return;
+    }
+
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match!");
       return;
@@ -20,9 +30,12 @@ export default function RegisterScreen({ navigation }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save user details in Firestore with hardcoded userType
+      // Save user details in Firestore
       await setDoc(doc(db, "users", user.uid), {
         email,
+        name,
+        phoneNumber,
+        dateOfBirth: dateOfBirth.toISOString(),
         userType: "user", // Hardcoded to "user"
         createdAt: new Date().toISOString(),
       });
@@ -35,9 +48,54 @@ export default function RegisterScreen({ navigation }) {
     }
   };
 
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setDateOfBirth(selectedDate);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Create Your Account</Text>
+
+      {/* Name Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+        autoCapitalize="words"
+      />
+
+      {/* Phone Number Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        value={phoneNumber}
+        onChangeText={setPhoneNumber}
+        keyboardType="phone-pad"
+        textContentType="telephoneNumber"
+      />
+
+      {/* Date of Birth Input */}
+      <TouchableOpacity
+        style={[styles.input, styles.datePicker]}
+        onPress={() => setShowDatePicker(true)}
+      >
+        <Text style={styles.dateText}>
+          {dateOfBirth ? dateOfBirth.toDateString() : "Select Date of Birth"}
+        </Text>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <DateTimePicker
+          value={dateOfBirth || new Date()}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+          maximumDate={new Date()} // Prevent selecting future dates
+        />
+      )}
 
       {/* Email Input */}
       <TextInput
@@ -105,6 +163,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 20,
     backgroundColor: "#f9f9f9",
+  },
+  datePicker: {
+    justifyContent: "center",
+  },
+  dateText: {
+    color: "#555",
   },
   button: {
     backgroundColor: "#007BFF",

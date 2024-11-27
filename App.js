@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Import your screens
 import SearchHotelsScreen from './src/Screens/SearchHotelsScreen';
@@ -41,8 +43,51 @@ import ImagingScreen from './src/Screens/ImagingScreen';
 import TreatmentHistoryScreen from './src/Screens/TreatmentHistoryScreen';
 import DiagnosisScreen from './src/Screens/DiagnosisScreen';
 import HomeScreen from './src/Screens/HomeScreen';
+import MyBookingsScreen from './src/Screens/MyBookingsScreen';
+import PatientSettingsScreen from './src/Screens/PatientSettingsScreen';
+import EditPersonalInfo from './src/Screens/EditPersonalInfo';
+import PrivacySettingsScreen from './src/Screens/PrivacySettingsScreen';
+import AboutMedTourScreen from './src/Screens/AboutMedTourScreen';
+
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+// Screens to include in the bottom navigation
+function BottomTabNavigator() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Medical Vault') {
+            iconName = focused ? 'folder' : 'folder-outline';
+          } 
+          else if (route.name === 'My Bookings') {
+            iconName = focused ? 'book' : 'book-outline';
+          }
+          else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#007BFF',
+        tabBarInactiveTintColor: 'gray',
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Medical Vault" component={MedicalRecordsVaultScreen} />
+      <Tab.Screen name="My Bookings" component={MyBookingsScreen} />
+      <Tab.Screen name="Profile" component={PatientSettingsScreen} />
+
+
+      
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   return (
@@ -56,9 +101,10 @@ export default function App() {
         />
         <Stack.Screen 
           name="HomeScreen" 
-          component={HomeScreen} 
-          options={{ title: 'Hotel Details' }} 
+          component={BottomTabNavigator} 
+          options={{ headerShown: false }}
         />
+       
         <Stack.Screen 
           name="MedicalProcedureScreen" 
           component={MedicalProcedureScreen} 
@@ -66,6 +112,21 @@ export default function App() {
         />
        
       
+       <Stack.Screen 
+          name="EditPersonalInfo" 
+          component={EditPersonalInfo} 
+          options={{ title: 'Hotel Details' }} 
+        />
+        <Stack.Screen 
+          name="PrivacySettingsScreen" 
+          component={PrivacySettingsScreen} 
+          options={{ title: 'Hotel Details' }} 
+        />
+          <Stack.Screen 
+          name="AboutMedTourScreen" 
+          component={AboutMedTourScreen} 
+          options={{ title: 'Hotel Details' }} 
+        />
          <Stack.Screen 
           name="HospitalListScreen" 
           component={HospitalListScreen} 
@@ -201,6 +262,49 @@ export default function App() {
 <Stack.Screen 
           name="AppointmentConfirmationScreen" 
           component={AppointmentConfirmationScreen} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+<Stack.Screen 
+          name="BookFlightScreen" 
+          component={BookFlightScreen} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+
+
+<Stack.Screen 
+          name="FlightsListScreen" 
+          component={FlightsListScreen} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+        
+        <Stack.Screen 
+          name="FlightBookingConfirmation" 
+          component={FlightBookingConfirmation} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+
+<Stack.Screen 
+          name="HotelsListScreen" 
+          component={HotelsListScreen} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+
+
+<Stack.Screen 
+          name="HotelBookingDetails" 
+          component={HotelBookingDetails} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+        
+        <Stack.Screen 
+          name="HotelBookingConfirmation" 
+          component={HotelBookingConfirmation} 
+          options={{ title: 'Flight Booking Confirmed' }} 
+        />
+        
+        <Stack.Screen 
+          name="MyHotelBookings" 
+          component={MyHotelBookings} 
           options={{ title: 'Flight Booking Confirmed' }} 
         />
 
