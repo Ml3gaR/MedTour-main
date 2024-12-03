@@ -163,6 +163,12 @@ function HospitalSignUpScreen() {
                 { label: "Cardiology", value: "Cardiology" },
                 { label: "Pediatrics", value: "Pediatrics" },
                 { label: "Orthopedics", value: "Orthopedics" },
+                { label: "Dermatology", value: "Dermatology" },
+                { label: "Neurology", value: "Neurology" },
+                { label: "Urology", value: "Urology" },
+                { label: "Fertility ", value: "Fertility" },
+                { label: "Dental", value: "OrthopeDentaldics" },
+                { label: "Infections", value: "Infections" },
               ]}
               placeholder={{ label: "Select Clinic Type", value: null }}
               style={pickerSelectStyles}

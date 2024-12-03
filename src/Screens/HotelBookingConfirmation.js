@@ -7,12 +7,12 @@ const HotelBookingConfirmation = () => {
 
   // Function to handle navigation back to the homepage
   const handleBackToHome = () => {
-    navigation.navigate('MyHotelBookings');
+    navigation.navigate('HomeScreen');
   };
 
   // Function to handle booking a flight (if applicable)
   const handleBookFlight = () => {
-    navigation.navigate('//writehere//');
+    navigation.navigate('MyHotelBookings');
   };
 
   return (
@@ -31,12 +31,12 @@ const HotelBookingConfirmation = () => {
 
       {/* Book Flight Button */}
       <TouchableOpacity style={styles.primaryButton} onPress={handleBookFlight}>
-        <Text style={styles.primaryButtonText}>Book Your Airport Transportation</Text>
+        <Text style={styles.primaryButtonText}>Go to My Bookings</Text>
       </TouchableOpacity>
 
       {/* Back to Homepage Button */}
       <TouchableOpacity style={styles.secondaryButton} onPress={handleBackToHome}>
-        <Text style={styles.secondaryButtonText}>Check Your Hotel Bookings</Text>
+        <Text style={styles.secondaryButtonText}>Go to Home Screen</Text>
       </TouchableOpacity>
     </View>
   );

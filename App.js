@@ -99,7 +99,7 @@ export default function App() {
         <Stack.Screen 
           name="LoginScreen" 
           component={LoginScreen} 
-          options={{ title: 'Search Hotels', headerShown: false }} 
+          options={{ title: '', headerShown: false }} 
         />
         <Stack.Screen 
           name="HomeScreen" 
@@ -110,24 +110,24 @@ export default function App() {
         <Stack.Screen 
           name="MedicalProcedureScreen" 
           component={MedicalProcedureScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Select Medical Procedure' }} 
         />
        
       
        <Stack.Screen 
           name="EditPersonalInfo" 
           component={EditPersonalInfo} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Edit Personal Info' }} 
         />
         <Stack.Screen 
           name="PrivacySettingsScreen" 
           component={PrivacySettingsScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Privacy Settings' }} 
         />
           <Stack.Screen 
           name="AboutMedTourScreen" 
           component={AboutMedTourScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'About MedTour' }} 
         />
          <Stack.Screen 
           name="HospitalListScreen" 
@@ -139,7 +139,7 @@ export default function App() {
 <Stack.Screen 
           name="HospitalDetailsScreen" 
           component={HospitalDetailsScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Hospital Details' }} 
         />
 
 <Stack.Screen 
@@ -151,20 +151,20 @@ export default function App() {
 <Stack.Screen 
           name="PatientsAppointmentsScreen" 
           component={PatientsAppointmentsScreen} 
-          options={{ title: '' }} 
+          options={{ title: 'Patient Appointments' }} 
         />
 
 
 <Stack.Screen 
           name="BookDoctorScreen" 
           component={BookDoctorScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Doctors List' }} 
         />
 
 <Stack.Screen 
           name="AppointmentScheduleScreen" 
           component={AppointmentScheduleScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Appointment Schedules' }} 
         />
 
 <Stack.Screen 
@@ -182,34 +182,34 @@ export default function App() {
 <Stack.Screen 
           name="HospitalSignUpScreen" 
           component={HospitalSignUpScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Hospital Signup' }} 
         />
 
 
 <Stack.Screen 
           name="DoctorsListScreen" 
           component={DoctorsListScreen} 
-          options={{ title: '' }} 
+          options={{ title: 'Manage Doctors' }} 
 
           />
 
 <Stack.Screen 
           name="RegisterScreen" 
           component={RegisterScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Registration' }} 
         />
 
       
 <Stack.Screen 
           name="AddMedicalRecordScreen" 
           component={AddMedicalRecordScreen} 
-          options={{ title: 'Available Flights' }} 
+          options={{ title: 'Add Medical Records' }} 
         />
 
         <Stack.Screen 
           name="AddDoctorScreen" 
           component={AddDoctorScreen} 
-          options={{ title: 'Available Flights' }} 
+          options={{ title: 'Add Doctors' }} 
         />
         <Stack.Screen 
           name="FlightBookingDetails" 
@@ -220,14 +220,14 @@ export default function App() {
 <Stack.Screen 
           name="HospitalHomeScreen" 
           component={HospitalHomeScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Hospital Dashboard' }} 
         />
 
 
 <Stack.Screen 
           name="MyAppointmentsBookings" 
           component={MyAppointmentsBookings} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'My Appointments' }} 
         />
 
 
@@ -235,69 +235,69 @@ export default function App() {
 <Stack.Screen 
           name="MedicalRecordsVaultScreen" 
           component={MedicalRecordsVaultScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: '' }} 
         />
 
 <Stack.Screen 
           name="XRayScreen" 
           component={XRayScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'X-Ray Records' }} 
         />
 
 
 <Stack.Screen 
           name="TestResultsScreen" 
           component={TestResultsScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Test Results Records' }} 
         />
 
 
 <Stack.Screen 
           name="PrescriptionsScreen" 
           component={PrescriptionsScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Perscription Records' }} 
         />
 
 <Stack.Screen 
           name="ImagingScreen" 
           component={ImagingScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Imaging Records' }} 
         />
         
         <Stack.Screen 
           name="TreatmentHistoryScreen" 
           component={TreatmentHistoryScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Treatment History Records' }} 
         />
         
         <Stack.Screen 
           name="DiagnosisScreen" 
           component={DiagnosisScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Diagnosis Records' }} 
         />
 <Stack.Screen 
           name="MedicalRecordSummaryScreen" 
           component={MedicalRecordSummaryScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Medical Record Summary' }} 
         />
 
 
 <Stack.Screen 
           name="AppointmentConfirmationScreen" 
           component={AppointmentConfirmationScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Appointment Confirmation' }} 
         />
 <Stack.Screen 
           name="BookFlightScreen" 
           component={BookFlightScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Book Flight' }} 
         />
 
 
 <Stack.Screen 
           name="FlightsListScreen" 
           component={FlightsListScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Flight List' }} 
         />
         
         <Stack.Screen 
@@ -309,26 +309,26 @@ export default function App() {
 <Stack.Screen 
           name="HotelsListScreen" 
           component={HotelsListScreen} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Hotels List' }} 
         />
 
 
 <Stack.Screen 
           name="HotelBookingDetails" 
           component={HotelBookingDetails} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Hotel Booking Details' }} 
         />
         
         <Stack.Screen 
           name="HotelBookingConfirmation" 
           component={HotelBookingConfirmation} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'Hotel Booking Confirmation' }} 
         />
         
         <Stack.Screen 
           name="MyHotelBookings" 
           component={MyHotelBookings} 
-          options={{ title: 'Flight Booking Confirmed' }} 
+          options={{ title: 'My Hotel Bookings' }} 
         />
 
         <Stack.Screen 

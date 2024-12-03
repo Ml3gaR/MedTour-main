@@ -107,8 +107,8 @@ export default function EditPersonalInfo() {
       {/* Editable Fields */}
       {renderEditableField("Name", userInfo.name, "name")}
       {renderEditableField("Email", userInfo.email, "email")}
-      {renderEditableField("Phone", userInfo.phone, "phone")}
-      {renderEditableField("Date of Birth", userInfo.dob, "dob")}
+      {renderEditableField("Phone", userInfo.phoneNumber , "phone")}
+      {renderEditableField("Date of Birth", userInfo.dateOfBirth, "dob")}
 
       {/* Back to Profile Button */}
       <TouchableOpacity

@@ -2,33 +2,58 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { Button } from "react-native-paper";
-import axios from "axios";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase"; // Update with your Firebase setup
 
 export default function MedicalProcedureScreen({ navigation }) {
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const [category, setCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  // Fetch countries and cities
+  // Fetch registered countries, cities, and categories from Firestore
   useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchLocationsAndCategories = async () => {
       try {
-        const response = await axios.get(
-          "https://countriesnow.space/api/v0.1/countries"
-        );
-        const countryList = response.data.data.map((country) => ({
-          label: country.country,
-          value: country.country,
-          cities: country.cities,
+        const facilitiesRef = collection(db, "facilities"); // Collection name
+        const snapshot = await getDocs(facilitiesRef);
+
+        const locationData = snapshot.docs.map((doc) => doc.data());
+
+        // Extract unique countries, cities, and categories
+        const uniqueCountries = {};
+        const uniqueCategories = new Set();
+        locationData.forEach(({ country, city, clinicType }) => {
+          if (!uniqueCountries[country]) {
+            uniqueCountries[country] = new Set();
+          }
+          uniqueCountries[country].add(city);
+          uniqueCategories.add(clinicType);
+        });
+
+        // Format countries and cities for RNPickerSelect
+        const formattedCountries = Object.keys(uniqueCountries).map((country) => ({
+          label: country,
+          value: country,
+          cities: Array.from(uniqueCountries[country]), // Convert Set to Array
         }));
-        setCountries(countryList);
+
+        setCountries(formattedCountries);
+        setCategories(
+          Array.from(uniqueCategories).map((category) => ({
+            label: category,
+            value: category,
+          }))
+        );
       } catch (error) {
-        console.error("Error fetching countries:", error);
+        console.error("Error fetching locations and categories:", error);
+        Alert.alert("Error", "Could not fetch location and category data.");
       }
     };
-    fetchCountries();
+
+    fetchLocationsAndCategories();
   }, []);
 
   const handleCountryChange = (countryName) => {
@@ -40,7 +65,7 @@ export default function MedicalProcedureScreen({ navigation }) {
   };
 
   const handleNext = () => {
-    if (!selectedCountry || !selectedCity || !category) {
+    if (!selectedCountry || !selectedCity || !selectedCategory) {
       Alert.alert("Error", "Please select all fields!");
       return;
     }
@@ -49,7 +74,7 @@ export default function MedicalProcedureScreen({ navigation }) {
     navigation.navigate("HospitalListScreen", {
       country: selectedCountry,
       city: selectedCity,
-      category: category,
+      category: selectedCategory,
     });
   };
 
@@ -76,14 +101,11 @@ export default function MedicalProcedureScreen({ navigation }) {
 
         {/* Category Picker */}
         <RNPickerSelect
-          onValueChange={(value) => setCategory(value)}
-          items={[
-            { label: "Cardiology", value: "Cardiology" },
-            { label: "Pediatrics", value: "Pediatrics" },
-            { label: "Orthopedics", value: "Orthopedics" },
-          ]}
+          onValueChange={(value) => setSelectedCategory(value)}
+          items={categories}
           placeholder={{ label: "Select Category", value: null }}
           style={pickerSelectStyles}
+          disabled={!categories.length}
         />
 
         {/* Next Button */}

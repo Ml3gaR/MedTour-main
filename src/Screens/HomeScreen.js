@@ -92,27 +92,8 @@ export default function HomeScreen() {
       </View>
 
       {/* Suggestions/Promotions Section */}
-      <View style={styles.suggestionsSection}>
-        <Text style={styles.sectionTitle}>Recommended for You</Text>
-        <View style={styles.suggestionCard}>
-          <Image
-            source={require("../assets/kingsaudhospital.jpeg")}
-            style={styles.suggestionImage}
-          />
-          <View style={styles.suggestionDetails}>
-            <Text style={styles.suggestionTitle}>King Saud University Medical City</Text>
-            <Text style={styles.suggestionDescription}>
-            King Saud University Medical City - Known for its outstanding cardiology department.
-            </Text>
-            <TouchableOpacity
-              style={styles.suggestionButton}
-              onPress={() => navigation.navigate("HospitalDetailsScreen")}
-            >
-              <Text style={styles.suggestionButtonText}>View Details</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+    
+    
     </ScrollView>
   );
 }

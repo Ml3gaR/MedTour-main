@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { db, auth } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Icons for categories
 const categoryIcons = {
-  xray: require('../assets/xray.webp'), // Replace with actual assets
-  testResult: require('../assets/test_result.webp'),
-  prescription: require('../assets/prescription.webp'),
-  imaging: require('../assets/imaging.webp'),
-  treatmentHistory: require('../assets/treatment.webp'),
-  diagnosis: require('../assets/diagnosis.webp'),
+  xray: 'radiology-box',
+  testResult: 'file-document-outline',
+  prescription: 'file-document-edit-outline',
+  imaging: 'camera-outline',
+  treatmentHistory: 'history',
+  diagnosis: 'stethoscope',
 };
 
 // Category names
@@ -100,7 +101,7 @@ export default function MedicalRecordsVaultScreen() {
             style={styles.categoryCard}
             onPress={() => handleCategoryPress(category)}
           >
-            <Image source={categoryIcons[category]} style={styles.categoryIcon} />
+            <Icon name={categoryIcons[category]} size={80} color="#007BFF" />
             <Text style={styles.categoryText}>{categoryNames[category]}</Text>
           </TouchableOpacity>
         )}
@@ -114,6 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F9F9F9',
     padding: 20,
+    marginTop: 50,
   },
   header: {
     fontSize: 24,
@@ -138,17 +140,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
   },
-  categoryIcon: {
-    width: 160,
-    height: 160,
-    marginBottom: 10,
-    borderRadius: 10,
-  },
   categoryText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
+    marginTop: 10,
   },
   loadingContainer: {
     flex: 1,

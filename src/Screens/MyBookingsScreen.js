@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#007BFF',
     textAlign: 'center',
-    marginVertical: 20,
+    marginVertical: 50,
   },
   listContainer: {
     paddingVertical: 20,

@@ -16,11 +16,10 @@ export default function HospitalHomeScreen() {
 
   const actions = [
     { id: "1", label: "Add Doctor", screen: "AddDoctorScreen", icon: "➕" },
-    { id: "2", label: "Manage Doctors", screen: "DoctorsListScreen", icon: "👨‍⚕️" },
-    { id: "3", label: "Permission Requests", screen: "PermissionRequestsListScreen", icon: "🔒" },
+    { id: "2", label: "Manage Doctors", screen: "DoctorsListScreen", icon: "🩺" },
     { id: "4", label: "Patient Appointments", screen: "PatientsAppointmentsScreen", icon: "📅" },
     { id: "5", label: "Analytics", screen: "AnalyticsScreen", icon: "📊" },
-    { id: "6", label: "Edit Account", screen: "CompleteFacilityProfileScreen", icon: "⚙️" },
+    { id: "6", label: "Logout", screen: "LoginScreen", icon: "↪️" },
   ];
 
   useEffect(() => {
@@ -92,7 +91,7 @@ export default function HospitalHomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hospital Dashboard</Text>
+      <Text style={styles.title}></Text>
 
       
 
