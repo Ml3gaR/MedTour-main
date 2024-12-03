@@ -10,7 +10,7 @@ import colors from "../config/colors";
 
 function ProfileScreen() {
   const navigation = useNavigation();
-  const [userInfo, setUserInfo] = useState({ name: "", email: "", phone: "", dob: "" });
+  const [userInfo, setUserInfo] = useState({ name: "", email: "", phone: "", dateOfBirth: "" });
 
   const fetchUserInfo = async () => {
     try {
@@ -26,7 +26,7 @@ function ProfileScreen() {
           name: data.name || "Not Provided",
           email: data.email || "Not Provided",
           phone: data.phone || "Not Provided",
-          dob: data.dob ? data.dob.split("T")[0] : "Not Provided", // Remove time from date
+          dateOfBirth : data.dateOfBirth  ? data.dateOfBirth .split("T")[0] : "Not Provided", // Remove time from date
         });
       } else {
         Alert.alert("Error", "User information not found.");
@@ -79,7 +79,7 @@ function ProfileScreen() {
         <AppText style={styles.infoText}>{userInfo.phone}</AppText>
 
         <AppText style={styles.infoLabel}>Date of Birth</AppText>
-        <AppText style={styles.infoText}>{userInfo.dob}</AppText>
+        <AppText style={styles.infoText}>{userInfo.dateOfBirth }</AppText>
       </View>
 
       {/* Action Buttons */}

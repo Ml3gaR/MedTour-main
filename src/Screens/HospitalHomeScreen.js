@@ -1,34 +1,52 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { auth, db } from '../firebase'; // Import Firebase
-import { signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { auth, db } from "../firebase"; // Firebase for authentication and database
+import { signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function HospitalHomeScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [hospitalData, setHospitalData] = useState(null);
+  const [stats, setStats] = useState({
+    doctors: 0, // Default value for total doctors
+    pendingPermissions: 0, // Default value for pending permissions
+  });
+
+  const actions = [
+    { id: "1", label: "Add Doctor", screen: "AddDoctorScreen", icon: "➕" },
+    { id: "2", label: "Manage Doctors", screen: "DoctorsListScreen", icon: "👨‍⚕️" },
+    { id: "3", label: "Permission Requests", screen: "PermissionRequestsListScreen", icon: "🔒" },
+    { id: "4", label: "Patient Appointments", screen: "PatientsAppointmentsScreen", icon: "📅" },
+    { id: "5", label: "Analytics", screen: "AnalyticsScreen", icon: "📊" },
+    { id: "6", label: "Edit Account", screen: "CompleteFacilityProfileScreen", icon: "⚙️" },
+  ];
 
   useEffect(() => {
     const fetchHospitalData = async () => {
       try {
         const user = auth.currentUser;
         if (!user) {
-          Alert.alert('Error', 'No user is logged in.');
-          navigation.reset({ index: 0, routes: [{ name: 'LoginScreen' }] });
+          Alert.alert("Error", "No user is logged in.");
+          navigation.reset({ index: 0, routes: [{ name: "LoginScreen" }] });
           return;
         }
 
-        const hospitalDoc = await getDoc(doc(db, 'facilities', user.uid));
+        const hospitalDoc = await getDoc(doc(db, "facilities", user.uid));
         if (hospitalDoc.exists()) {
-          setHospitalData(hospitalDoc.data());
+          const data = hospitalDoc.data();
+          setHospitalData(data);
+          setStats({
+            doctors: data.doctorsCount || 0, // Update total doctors from database
+            pendingPermissions: data.pendingPermissions || 0, // Update pending permissions
+          });
         } else {
-          Alert.alert('Error', 'No hospital data found. Please try again.');
+          Alert.alert("Error", "No hospital data found. Please try again.");
         }
       } catch (error) {
-        console.error('Error fetching hospital data:', error);
-        Alert.alert('Error', 'Failed to fetch hospital data.');
+        console.error("Error fetching hospital data:", error);
+        Alert.alert("Error", "Failed to fetch hospital data.");
       } finally {
         setLoading(false);
       }
@@ -40,101 +58,124 @@ export default function HospitalHomeScreen() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      Alert.alert('Success', 'Logged out successfully!');
-      navigation.reset({ index: 0, routes: [{ name: 'LoginScreen' }] });
+      Alert.alert("Success", "Logged out successfully!");
+      navigation.reset({ index: 0, routes: [{ name: "LoginScreen" }] });
     } catch (error) {
-      console.error('Logout Error:', error);
-      Alert.alert('Error', 'Failed to log out. Please try again.');
+      console.error("Logout Error:", error);
+      Alert.alert("Error", "Failed to log out. Please try again.");
     }
   };
+
+  const renderStatCard = ({ label, value }) => (
+    <View style={styles.statCard}>
+      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
+  );
+
+  const renderAction = ({ item }) => (
+    <TouchableOpacity
+      style={styles.actionCard}
+      onPress={() => {
+        if (item.id === "6") handleLogout(); // Use logout for Edit Account if needed
+        else navigation.navigate(item.screen, { hospitalId: auth.currentUser.uid });
+      }}
+    >
+      <Text style={styles.actionIcon}>{item.icon}</Text>
+      <Text style={styles.actionLabel}>{item.label}</Text>
+    </TouchableOpacity>
+  );
 
   if (loading) {
     return <ActivityIndicator size="large" color="#007BFF" style={{ flex: 1 }} />;
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={require('../assets/MedTourLogo.png')}
-          style={styles.logo}
-        />
-        <Text style={styles.title}>Welcome, {hospitalData?.hospitalName || 'Hospital'}</Text>
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Hospital Dashboard</Text>
 
-      {/* Dashboard Options */}
-      <View style={styles.optionsContainer}>
-        <TouchableOpacity
-          style={styles.optionCard}
-          onPress={() => navigation.navigate('AddDoctorScreen', { hospitalId: auth.currentUser.uid })}
-        >
-          <Text style={styles.optionText}>Add Doctor</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.optionCard}
-          onPress={() => navigation.navigate('DoctorsListScreen', { hospitalId: auth.currentUser.uid })}
-        >
-          <Text style={styles.optionText}>View Doctors</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.optionCard}
-          onPress={() => navigation.navigate('CompleteFacilityProfileScreen', { hospitalId: auth.currentUser.uid })}
-        >
-          <Text style={styles.optionText}>View/Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.optionCard}
-          onPress={handleLogout}
-        >
-          <Text style={styles.optionText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      
+
+      <Text style={styles.title}>Actions</Text>
+
+      <FlatList
+        data={actions}
+        keyExtractor={(item) => item.id}
+        renderItem={renderAction}
+        numColumns={2}
+        style={styles.actionsContainer}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  logo: {
-    width: 120,
-    height: 60,
-    resizeMode: 'contain',
-    marginBottom: 10,
+    backgroundColor: "#f9f9f9",
+    padding: 20,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#007BFF',
+    fontWeight: "bold",
+    color: "#007BFF",
+    marginBottom: 20,
   },
-  optionsContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    marginVertical: 20,
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
   },
-  optionCard: {
-    backgroundColor: '#007BFF',
-    padding: 15,
+  statCard: {
+    backgroundColor: "#fff",
     borderRadius: 10,
-    marginBottom: 15,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginHorizontal: 5,
+    shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#007BFF",
+  },
+  statLabel: {
+    fontSize: 14,
+    color: "#555",
+    marginTop: 5,
+  },
+  actionsContainer: {
+    marginTop: 20,
+  },
+  actionCard: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
     elevation: 5,
   },
-  optionText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  actionIcon: {
+    fontSize: 30,
+    color: "#007BFF",
+    marginBottom: 10,
+  },
+  actionLabel: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
+

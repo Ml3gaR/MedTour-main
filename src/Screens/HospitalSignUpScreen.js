@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert, ScrollView } from "react-native";
+import { StyleSheet, View, Alert, ScrollView, Image, TouchableOpacity, Text } from "react-native";
 import * as Yup from "yup";
+import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 import { db, auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -20,6 +21,10 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string().matches(/^[0-9]+$/, "Phone number must be digits").required("Phone number is required"),
   password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
   address: Yup.string().required("Address is required"),
+  price: Yup.string().required("Price is required"),
+  distance: Yup.string().required("Distance from airport is required"),
+  rating: Yup.string().required("Rating is required"),
+  description: Yup.string().required("Description is required"),
 });
 
 function HospitalSignUpScreen() {
@@ -29,6 +34,7 @@ function HospitalSignUpScreen() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedClinicType, setSelectedClinicType] = useState("");
+  const [hospitalImage, setHospitalImage] = useState(null);
 
   // Fetch countries and cities from API
   useEffect(() => {
@@ -54,9 +60,38 @@ function HospitalSignUpScreen() {
     setCities(selected?.cities.map((city) => ({ label: city, value: city })) || []);
   };
 
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setHospitalImage(result.assets[0].uri);
+    }
+  };
+
   const handleSignUp = async (values) => {
     try {
-      const { email, password, hospitalName, registrationNumber, phone, address } = values;
+      const {
+        email,
+        password,
+        hospitalName,
+        registrationNumber,
+        phone,
+        address,
+        price,
+        distance,
+        rating,
+        description,
+      } = values;
+
+      if (!hospitalImage) {
+        Alert.alert("Error", "Please upload a hospital image.");
+        return;
+      }
 
       // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -73,6 +108,11 @@ function HospitalSignUpScreen() {
         city: selectedCity,
         address,
         userType: "facility",
+        price,
+        distance,
+        rating,
+        description,
+        image: hospitalImage,
       });
 
       Alert.alert("Sign Up Successful", "Your account has been created!", [
@@ -96,6 +136,10 @@ function HospitalSignUpScreen() {
             phone: "",
             password: "",
             address: "",
+            price: "",
+            distance: "",
+            rating: "",
+            description: "",
           }}
           onSubmit={handleSignUp}
           validationSchema={validationSchema}
@@ -144,6 +188,25 @@ function HospitalSignUpScreen() {
             <AppFormField name="address" placeholder="Address" multiline style={styles.input} />
           </View>
 
+          {/* Hospital Profile Details */}
+          <View style={styles.section}>
+            <AppText style={styles.sectionTitle}>Hospital Profile Details</AppText>
+            <TouchableOpacity onPress={handlePickImage} style={styles.imagePicker}>
+              <Text style={styles.imagePickerText}>
+                {hospitalImage ? "Change Hospital Image" : "Upload Hospital Image"}
+              </Text>
+            </TouchableOpacity>
+            <AppFormField name="price" placeholder="Price (SAR)" keyboardType="numeric" style={styles.input} />
+            <AppFormField
+              name="distance"
+              placeholder="Distance from Airport (in meters)"
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <AppFormField name="rating" placeholder="Rating (1-5)" keyboardType="numeric" style={styles.input} />
+            <AppFormField name="description" placeholder="Description" multiline style={styles.input} />
+          </View>
+
           {/* Submit Button */}
           <SubmitButton title="Sign Up" />
         </AppForm>
@@ -151,6 +214,7 @@ function HospitalSignUpScreen() {
     </Screen>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,6 +255,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     marginBottom: 16,
+  },
+  imagePicker: {
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  imagePickerText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

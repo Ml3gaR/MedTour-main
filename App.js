@@ -48,7 +48,9 @@ import PatientSettingsScreen from './src/Screens/PatientSettingsScreen';
 import EditPersonalInfo from './src/Screens/EditPersonalInfo';
 import PrivacySettingsScreen from './src/Screens/PrivacySettingsScreen';
 import AboutMedTourScreen from './src/Screens/AboutMedTourScreen';
-
+import AnalyticsScreen from './src/Screens/AnalyticsScreen';
+import PatientsAppointmentsScreen from './src/Screens/PatientsAppointmentsScreen';
+import DoctorsListScreen from './src/Screens/DoctorsListScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -130,7 +132,7 @@ export default function App() {
          <Stack.Screen 
           name="HospitalListScreen" 
           component={HospitalListScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Hospital List' }} 
         />
 
 
@@ -139,6 +141,19 @@ export default function App() {
           component={HospitalDetailsScreen} 
           options={{ title: 'Hotel Details' }} 
         />
+
+<Stack.Screen 
+          name="AnalyticsScreen" 
+          component={AnalyticsScreen} 
+          options={{ title: '' }} 
+        />
+
+<Stack.Screen 
+          name="PatientsAppointmentsScreen" 
+          component={PatientsAppointmentsScreen} 
+          options={{ title: '' }} 
+        />
+
 
 <Stack.Screen 
           name="BookDoctorScreen" 
@@ -155,7 +170,7 @@ export default function App() {
 <Stack.Screen 
           name="SignUpSelectionScreen" 
           component={SignUpSelectionScreen} 
-          options={{ title: 'Hotel Details' }} 
+          options={{ title: 'Select Account Type' }} 
         />
 
 <Stack.Screen 
@@ -169,6 +184,14 @@ export default function App() {
           component={HospitalSignUpScreen} 
           options={{ title: 'Hotel Details' }} 
         />
+
+
+<Stack.Screen 
+          name="DoctorsListScreen" 
+          component={DoctorsListScreen} 
+          options={{ title: '' }} 
+
+          />
 
 <Stack.Screen 
           name="RegisterScreen" 

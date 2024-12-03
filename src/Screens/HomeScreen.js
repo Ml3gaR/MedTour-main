@@ -19,25 +19,25 @@ const shortcuts = [
     id: "1",
     title: "Book Appointment",
     route: "MedicalProcedureScreen",
-    icon: require("../assets/appointments.png"),
+    icon: require("../assets/bookappointment.jpg"),
   },
   {
     id: "2",
     title: "Find Hotels",
     route: "SearchHotelsScreen",
-    icon: require("../assets/hotel.png"),
+    icon: require("../assets/bookhotel.jpg"),
   },
   {
     id: "3",
     title: "Book Flight",
     route: "BookFlightScreen",
-    icon: require("../assets/flight.png"),
+    icon: require("../assets/bookflight.webp"),
   },
   {
     id: "4",
     title: "Medical Records Vault",
     route: "MedicalRecordsVaultScreen",
-    icon: require("../assets/medical_records.png"),
+    icon: require("../assets/medicalrecords.webp"),
   },
 ];
 
@@ -70,7 +70,7 @@ export default function HomeScreen() {
         onPress={() => navigation.navigate("MedicalProcedureScreen")}
       >
         <Image
-          source={require("../assets/plan_trip.png")}
+          source={require("../assets/medicaltrip.jpg")}
           style={styles.planTripImage}
         />
         <Text style={styles.planTripText}>Plan Your Medical Trip</Text>
@@ -96,13 +96,13 @@ export default function HomeScreen() {
         <Text style={styles.sectionTitle}>Recommended for You</Text>
         <View style={styles.suggestionCard}>
           <Image
-            source={require("../assets/recommended_hospital.png")}
+            source={require("../assets/kingsaudhospital.jpeg")}
             style={styles.suggestionImage}
           />
           <View style={styles.suggestionDetails}>
-            <Text style={styles.suggestionTitle}>Top-rated Hospital</Text>
+            <Text style={styles.suggestionTitle}>King Saud University Medical City</Text>
             <Text style={styles.suggestionDescription}>
-              Nordwest Clinic - Known for its outstanding cardiology department.
+            King Saud University Medical City - Known for its outstanding cardiology department.
             </Text>
             <TouchableOpacity
               style={styles.suggestionButton}
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   welcomeText: {
+    marginTop: 25,
     fontSize: 24,
     fontWeight: "bold",
     color: "#fff",

@@ -38,7 +38,7 @@ function hospitalCard({ image, name,  specialist, distance, price, rating, onPre
 
 const styles = StyleSheet.create({
     card:{
-        width: "90%",
+        width: "100%",
         height:130,
         flexDirection: "row",
         backgroundColor: colors.white,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: colors.primary,
         textAlign: "right",
-        marginLeft: 35,
+        marginLeft: 10,
     },
 
 })
